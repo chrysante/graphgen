@@ -1,5 +1,7 @@
 #include "Generate.h"
 
+#include <array>
+#include <iomanip>
 #include <iostream>
 
 #include "Graph.h"
@@ -7,39 +9,8 @@
 
 using namespace graphgen;
 
-static constexpr auto monoFont = "SF Mono";
-
-static constexpr StreamManip tableBegin = [](std::ostream& str,
-                                                  int border = 0,
-                                                  int cellborder = 0,
-                                                  int cellspacing = 0) {
-    str << "<table border=\"" << border << "\" cellborder=\"" << cellborder
-        << "\" cellspacing=\"" << cellspacing << "\">";
-};
-
-static constexpr StreamManip tableEnd = [](std::ostream& str) {
-    str << "</table>";
-};
-
-static constexpr StreamManip fontBegin =
-    [](std::ostream& str, std::string_view fontname) {
-    str << "<font face=\"" << fontname << "\">";
-};
-
-static constexpr StreamManip fontEnd = [](std::ostream& str) {
-    str << "</font>";
-};
-
-static constexpr StreamManip rowBegin = [](std::ostream& str) {
-    str << "<tr><td align=\"left\">";
-};
-
-static constexpr StreamManip rowEnd = [](std::ostream& str) {
-    str << "</td></tr>";
-};
-
-std::ostream& operator<<(std::ostream& ostream, ID id) {
-    return ostream << "node_" << id.raw();
+static std::ostream& operator<<(std::ostream& str, ID id) {
+    return str << "vertex_" << id.raw();
 }
 
 static std::ostream& operator<<(std::ostream& str, GraphKind kind) {
@@ -53,48 +24,72 @@ static std::ostream& operator<<(std::ostream& str, GraphKind kind) {
     }
 }
 
+StreamManip declare = [](std::ostream& str, Graph const& graph) {
+    if (graph.parent()) {
+        str << "subgraph cluster_" << graph.id();
+    }
+    else {
+        str << graph.kind();
+    }
+};
+
 namespace {
 
-struct Context {
+enum ScopeKind { Brace, Bracket };
+
+static char const* open(ScopeKind kind) {
+    return std::array{ "{", "[" }[static_cast<size_t>(kind)];
+}
+
+static char const* close(ScopeKind kind) {
+    return std::array{ "}", "]" }[static_cast<size_t>(kind)];
+}
+
+struct Context: VertexVisitor {
     Graph const& graph;
     std::ostream& str;
-    
+
     int currentIndent = 0;
-    
-    Context(Graph const& graph, std::ostream& str, int indent = 0): graph(graph), str(str), currentIndent(indent) {}
-    
-    void beginScope(auto const&... args) {
-        line(args..., "{");
+
+    Context(Graph const& graph, std::ostream& str, int indent = 0):
+        graph(graph), str(str), currentIndent(indent) {}
+
+    void beginScope(ScopeKind kind, auto const&... args) {
+        line(args..., " ", open(kind));
         ++currentIndent;
     }
-    
-    void endScope() {
+
+    void endScope(ScopeKind kind, auto const&... args) {
         --currentIndent;
-        line("}");
+        if constexpr (sizeof...(args) > 0) {
+            line(close(kind), " // ", args...);
+        }
+        else {
+            line(close(kind));
+        }
     }
-    
+
     void line(auto const&... args) {
         indent();
         ((str << args), ...);
         str << "\n";
     }
-    
+
     void indent() {
         for (int i = 0; i < currentIndent; ++i) {
             str << "    ";
         }
     }
-    
-    void run() {
-        generate(graph);
-    }
-    
-    void generate(Graph const& graph);
-    
-    void generate(Node const& node);
-    
+
+    void run() { graph.visit(*this); }
+
+    void visit(Graph const& graph) override;
+
+    void visit(Vertex const& vertex) override;
+
+    void commonDecls(Vertex const& vertex);
+
     void generate(Edge edge);
-    
 };
 
 } // namespace
@@ -103,26 +98,29 @@ void graphgen::generate(Graph const& graph, std::ostream& ostream) {
     Context(graph, ostream).run();
 }
 
-void graphgen::generate(Graph const& graph) {
-    generate(graph, std::cout);
-}
+void graphgen::generate(Graph const& graph) { generate(graph, std::cout); }
 
-void Context::generate(Graph const& graph) {
-    beginScope(graph.kind());
-    for (auto& subgraph: graph.subgraphs()) {
-        Context(subgraph, str, currentIndent).run();
-    }
-    for (auto& node: graph.nodes()) {
-        generate(node);
+void Context::visit(Graph const& graph) {
+    beginScope(Brace, declare(graph));
+    commonDecls(graph);
+    for (auto* vertex: graph.vertices()) {
+        vertex->visit(*this);
     }
     for (auto& edge: graph.edges()) {
         generate(edge);
     }
-    endScope();
+    endScope(Brace, graph.kind());
 }
 
-void Context::generate(Node const& node) {
-    line(node.id(), " [ label = ", StreamManip(node.label()) ," ]");
+void Context::visit(Vertex const& vertex) {
+    beginScope(Bracket, vertex.id());
+    commonDecls(vertex);
+    endScope(Bracket);
+}
+
+void Context::commonDecls(Vertex const& vertex) {
+    line("label = ", vertex.label());
+    line("fontname = ", std::quoted(vertex.font()));
 }
 
 static StreamManip makeEdge = [](std::ostream& str, Edge edge, GraphKind kind) {
@@ -141,6 +139,4 @@ static StreamManip makeEdge = [](std::ostream& str, Edge edge, GraphKind kind) {
     str << edge.from;
 };
 
-void Context::generate(Edge edge) {
-    line(makeEdge(edge, graph.kind()));
-}
+void Context::generate(Edge edge) { line(makeEdge(edge, graph.kind())); }

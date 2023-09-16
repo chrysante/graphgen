@@ -1,48 +1,97 @@
 #ifndef GRAPHGEN_GRAPH_H_
 #define GRAPHGEN_GRAPH_H_
 
-#include <string>
-#include <vector>
-#include <span>
 #include <functional>
 #include <iosfwd>
+#include <memory>
+#include <ranges>
+#include <span>
+#include <string>
+#include <vector>
 
 namespace graphgen {
+
+std::string defaultFont();
+
+void setDefaultFont(std::string fontname);
+
+class Vertex;
+class Graph;
+
+class VertexVisitor {
+public:
+    virtual ~VertexVisitor() = default;
+
+    virtual void visit(Vertex const& vertex) = 0;
+
+    virtual void visit(Graph const& vertex) = 0;
+};
 
 class ID {
 public:
     ID(void const volatile* ptr): _id(reinterpret_cast<uintptr_t>(ptr)) {}
 
     ID(int id): _id(id) {}
-    
+
     ID(size_t id): _id(id) {}
-    
+
     uintptr_t raw() const { return _id; }
-    
+
 private:
     uintptr_t _id;
 };
 
-enum class GraphKind {
-    Directed, Undirected, Tree
+enum class GraphKind { Directed, Undirected, Tree };
+
+enum class LabelKind { PlainText, HTML };
+
+class Label {
+public:
+    Label(std::string label, LabelKind kind = LabelKind::PlainText);
+
+    Label(std::function<void(std::ostream&)> generator,
+          LabelKind kind = LabelKind::PlainText);
+
+    LabelKind kind() const { return _kind; }
+
+    friend std::ostream& operator<<(std::ostream& ostream, Label const& label) {
+        label.emit(ostream);
+        return ostream;
+    }
+
+private:
+    void emit(std::ostream& str) const;
+
+    std::function<void(std::ostream&)> generator;
+    LabelKind _kind;
 };
 
-class Graph;
-
-class Node {
+class Vertex {
 public:
-    Node(ID id, std::string label);
-    
-    Node(ID id, std::function<void(std::ostream&)> label);
-    
+    Vertex(ID id, Label label);
+
+    virtual ~Vertex() = default;
+
     ID id() const { return _id; }
-    
-    auto const& label() const { return _label; }
-    
+
+    Label const& label() const { return _label; }
+
+    Vertex* parent() { return _parent; }
+
+    Vertex const* parent() const { return _parent; }
+
+    virtual void visit(VertexVisitor& visitor) const { visitor.visit(*this); }
+
+    std::string const& font() const { return _font; }
+
+    void setFont(std::string fontname) { _font = std::move(fontname); }
+
 private:
     friend class Graph;
-    std::function<void(std::ostream&)> _label;
+    Vertex* _parent = nullptr;
     ID _id;
+    Label _label;
+    std::string _font;
 };
 
 struct Edge {
@@ -50,40 +99,40 @@ struct Edge {
     ID to;
 };
 
-class Graph {
+class Graph: public Vertex {
 public:
-    explicit Graph(GraphKind kind): _kind(kind) {}
-    
-    void addSubgraph(Graph subgraph);
+    explicit Graph(ID id, Label label, GraphKind kind):
+        Vertex(id, std::move(label)), _kind(kind) {}
 
-    ID addNode(Node node) {
-        _nodes.push_back(node);
-        return node.id();
+    ID addVertex(Vertex* vertex) {
+        _vertices.push_back(std::unique_ptr<Vertex>(vertex));
+        vertex->_parent = this;
+        return vertex->id();
     }
-    
-    void addEdge(Edge edge) {
-        _edges.push_back(edge);
+
+    ID addVertex(std::unique_ptr<Vertex> vertex) {
+        return addVertex(vertex.release());
     }
-    
-    void addEdge(ID from, ID to) {
-        addEdge({ from, to });
-    }
-    
+
+    void addEdge(Edge edge) { _edges.push_back(edge); }
+
+    void addEdge(ID from, ID to) { addEdge({ from, to }); }
+
     GraphKind kind() const { return _kind; }
-    
-    bool isSubgraph() const { return _isSubgraph; }
-    
-    std::span<Graph const> subgraphs() const { return _subgraphs; }
-    
-    std::span<Node const> nodes() const { return _nodes; }
-    
+
+    auto vertices() const {
+        return _vertices |
+               std::views::transform([](auto& ptr) { return ptr.get(); });
+    }
+
     std::span<Edge const> edges() const { return _edges; }
-    
+
+    void visit(VertexVisitor& visitor) const override { visitor.visit(*this); }
+
 private:
     GraphKind _kind;
-    std::vector<Node> _nodes;
+    std::vector<std::unique_ptr<Vertex>> _vertices;
     std::vector<Edge> _edges;
-    std::vector<Graph> _subgraphs;
     bool _isSubgraph = false;
 };
 
