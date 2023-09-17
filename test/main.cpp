@@ -7,24 +7,6 @@
 using namespace graphgen;
 
 int main(int argc, char const* argv[]) {
-    auto G = std::make_unique<Graph>(0);
-
-    G->kind(GraphKind::Directed)
-        ->font("SF Mono")
-        ->add(Vertex::make(1)->label("Label A")->font("Helvetica"))
-        ->add(Vertex::make(2)->label("Label B")->shape(VertexShape::Circle))
-        ->add(Vertex::make(3)->label("Label C")->shape(VertexShape::Ellipse))
-        ->add(Edge{ 1, 2 })
-        ->add(Edge{ 2, 3 })
-        ->add(Edge{ 3, 1 });
-
-    auto H = std::make_unique<Graph>(4);
-    H->label("Subgraph")
-        ->add(Vertex::make(5)->label("Sub A"))
-        ->add(Vertex::make(6)->label("Sub B"))
-        ->add({ 5, 6 });
-    G->add(std::move(H));
-
     auto table =
         R"(<table border="0" cellborder="0" cellspacing="0">
         <tr><td align="left"><font face="SF Mono">
@@ -38,12 +20,25 @@ int main(int argc, char const* argv[]) {
         </font></td></tr>
         </table>)";
 
-    H = std::make_unique<Graph>(7);
-    H->add(Vertex::make(8)->label("Sub A"))
-        ->add(Vertex::make(9)->label(table, LabelKind::HTML))
-        ->add({ 8, 9 });
-    G->add(std::move(H));
-
+    auto G = std::make_unique<Graph>(0);
+    G->kind(GraphKind::Directed)
+        ->rankdir(RankDir::BottomTop)
+        ->add(Vertex::make(1)->label("Label A")->font("Helvetica"))
+        ->add(Vertex::make(2)->label("Label B")->shape(VertexShape::Circle))
+        ->add(Vertex::make(3)->label("Label C")->shape(VertexShape::Ellipse))
+        ->add(Edge{ 1, 2 })
+        ->add(Edge{ 2, 3 })
+        ->add(Edge{ 3, 1 })
+        ->add(Graph::make(4)
+                  ->label("Subgraph")
+                  ->add(Vertex::make(5)->label("Sub A"))
+                  ->add(Vertex::make(6)->label("Sub B"))
+                  ->add({ 5, 6 }))
+        ->add(Graph::make(7)
+                  ->add(Vertex::make(8)->label("Sub A"))
+                  ->add(Vertex::make(9)->label(table, LabelKind::HTML))
+                  ->add({ 8, 9 }))
+        ->font("SF Mono");
     generate(*G);
 
     if (argc < 2) {

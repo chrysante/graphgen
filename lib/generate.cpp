@@ -91,13 +91,24 @@ struct Context: VertexVisitor {
 
     int currentIndent = 0;
     std::stack<Scope> openScopes;
+    std::stack<std::string> fontStack;
 
     Context(Graph const& graph, std::ostream& str, int indent = 0):
         graph(graph), str(str), currentIndent(indent) {}
 
-    [[nodiscard]] auto beginScope(ScopeKind kind, auto const&... args) {
+    [[nodiscard]] auto beginScope(Vertex const& vertex,
+                                  ScopeKind kind,
+                                  auto const&... args) {
         beginScopeImpl(kind, args...);
-        return ScopeGuard([this] { endScopeImpl(); });
+        if (vertex.font()) {
+            fontStack.push(*vertex.font());
+        }
+        return ScopeGuard([this, &vertex] {
+            endScopeImpl();
+            if (vertex.font()) {
+                fontStack.pop();
+            }
+        });
     }
 
     void beginScopeImpl(ScopeKind kind, auto const&... args) {
@@ -127,6 +138,16 @@ struct Context: VertexVisitor {
         }
     }
 
+    std::string getFont(Vertex const& vertex) const {
+        if (vertex.font()) {
+            return *vertex.font();
+        }
+        if (!fontStack.empty()) {
+            return fontStack.top();
+        }
+        return defaultFont();
+    }
+
     void run() { graph.visit(*this); }
 
     void visit(Graph const& graph) override;
@@ -147,7 +168,7 @@ void graphgen::generate(Graph const& graph, std::ostream& ostream) {
 void graphgen::generate(Graph const& graph) { generate(graph, std::cout); }
 
 void Context::visit(Graph const& graph) {
-    auto scope = beginScope(Brace, declare(graph));
+    auto scope = beginScope(graph, Brace, declare(graph));
     commonDecls(graph);
     line("rankdir = ", graph.rankdir());
     for (auto* vertex: graph.vertices()) {
@@ -159,15 +180,13 @@ void Context::visit(Graph const& graph) {
 }
 
 void Context::visit(Vertex const& vertex) {
-    auto scope = beginScope(Bracket, vertex.id());
+    auto scope = beginScope(vertex, Bracket, vertex.id());
     commonDecls(vertex);
 }
 
 void Context::commonDecls(Vertex const& vertex) {
     line("label = ", vertex.label());
-    if (auto font = vertex.font()) {
-        line("fontname = ", std::quoted(*font));
-    }
+    line("fontname = ", std::quoted(getFont(vertex)));
     line("shape = ", vertex.shape());
 }
 

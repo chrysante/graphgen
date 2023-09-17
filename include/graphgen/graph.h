@@ -83,11 +83,17 @@ public:
     /// This can be passed directly to the parent graph which takes ownership
     static D* make(ID id) { return new D(id); }
 
+    /// \Returns the label of the vertex
+    Label const& label() const { return derived()->_label; }
+
     /// Set the label of this vertex to \p text
     D* label(std::string text, LabelKind kind = LabelKind::PlainText) {
         derived()->_label = Label(std::move(text), kind);
         return derived();
     }
+
+    /// \Returns the shape of the vertex
+    VertexShape shape() const { return derived()->_shape; }
 
     /// Set the shape of this vertex the default shape of all child vertices if
     /// this vertex is a graph
@@ -96,14 +102,18 @@ public:
         return derived();
     }
 
+    /// \Returns the font used for the vertex if overriden
+    std::optional<std::string> font() const { return derived()->_font; }
+
     /// Override the font used for this vertex
-    D* font(std::string fontname) {
+    D* font(std::optional<std::string> fontname) {
         derived()->_font = std::move(fontname);
         return derived();
     }
 
 private:
     D* derived() { return static_cast<D*>(this); }
+    D const* derived() const { return static_cast<D const*>(this); }
 };
 
 #define GRAPHGEN_USE_MIXIN(Type)                                               \
@@ -113,7 +123,7 @@ private:
     using Type::font;
 
 /// Represents a vertex in the graph
-class Vertex: VertexMixin<Vertex> {
+class Vertex: public VertexMixin<Vertex> {
     template <typename>
     friend class VertexMixin;
 
@@ -126,15 +136,6 @@ public:
 
     /// \Returns the ID of the vertex
     ID id() const { return _id; }
-
-    /// \Returns the label of the vertex
-    Label const& label() const { return _label; }
-
-    /// \Returns the shape of the vertex
-    VertexShape shape() const { return _shape; }
-
-    /// \Returns the font used for the vertex if overriden
-    std::optional<std::string> font() const { return _font; }
 
     /// \Returns the parent vertex in the graph
     Vertex* parent() { return _parent; }
@@ -176,7 +177,7 @@ public:
     GRAPHGEN_USE_MIXIN(VertexMixin<Graph>)
 
     using Vertex::Vertex;
-    
+
     Graph(): Vertex(ID(this)) {}
 
     /// Adds \p vertex to the graph
@@ -239,5 +240,7 @@ private:
 };
 
 } // namespace graphgen
+
+#undef GRAPHGEN_USE_MIXIN
 
 #endif // GRAPHGEN_GRAPH_H_
