@@ -1,16 +1,8 @@
-#ifndef GRAPHGEN_CONFIG_H_
-#define GRAPHGEN_CONFIG_H_
+#ifndef GRAPHGEN_GRAPHGEN_H_
+#define GRAPHGEN_GRAPHGEN_H_
 
-#include <string>
+#include <graphgen/config.h>
+#include <graphgen/generate.h>
+#include <graphgen/graph.h>
 
-namespace graphgen {
-
-/// \Returns the name of the currently set default font
-std::string defaultFont();
-
-/// Set the default font to \p fontname
-void defaultFont(std::string fontname);
-
-} // namespace graphgen
-
-#endif // GRAPHGEN_CONFIG_H_
+#endif // GRAPHGEN_GRAPHGEN_H_

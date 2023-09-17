@@ -3,7 +3,7 @@
 using namespace graphgen;
 
 static std::string& staticDefFont() {
-    static std::string font = "SF Mono";
+    static std::string font;
     return font;
 }
 

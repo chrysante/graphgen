@@ -3,10 +3,12 @@
 #include <array>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
+#include <stack>
 
 #include "config.h"
 #include "graph.h"
-#include "streammanip.h"
+#include "util.h"
 #include "vertexvisitor.h"
 
 using namespace graphgen;
@@ -16,13 +18,28 @@ static std::ostream& operator<<(std::ostream& str, ID id) {
 }
 
 static std::ostream& operator<<(std::ostream& str, GraphKind kind) {
+    using enum GraphKind;
     switch (kind) {
-    case GraphKind::Directed:
+    case Directed:
         return str << "digraph";
-    case GraphKind::Undirected:
+    case Undirected:
         return str << "graph";
-    case GraphKind::Tree:
+    case Tree:
         assert(false);
+    }
+}
+
+static std::ostream& operator<<(std::ostream& str, RankDir dir) {
+    using enum RankDir;
+    switch (dir) {
+    case TopBottom:
+        return str << "TB";
+    case LeftRight:
+        return str << "LR";
+    case BottomTop:
+        return str << "BT";
+    case RightLeft:
+        return str << "RL";
     }
 }
 
@@ -63,28 +80,39 @@ static char const* close(ScopeKind kind) {
     return std::array{ "}", "]" }[static_cast<size_t>(kind)];
 }
 
+struct Scope {
+    ScopeKind kind;
+    std::string name;
+};
+
 struct Context: VertexVisitor {
     Graph const& graph;
     std::ostream& str;
 
     int currentIndent = 0;
+    std::stack<Scope> openScopes;
 
     Context(Graph const& graph, std::ostream& str, int indent = 0):
         graph(graph), str(str), currentIndent(indent) {}
 
-    void beginScope(ScopeKind kind, auto const&... args) {
-        line(args..., " ", open(kind));
+    [[nodiscard]] auto beginScope(ScopeKind kind, auto const&... args) {
+        beginScopeImpl(kind, args...);
+        return ScopeGuard([this] { endScopeImpl(); });
+    }
+
+    void beginScopeImpl(ScopeKind kind, auto const&... args) {
+        std::stringstream sstr;
+        ((sstr << args), ...);
+        openScopes.push({ kind, std::move(sstr).str() });
+        line(openScopes.top().name, " ", open(kind));
         ++currentIndent;
     }
 
-    void endScope(ScopeKind kind, auto const&... args) {
+    void endScopeImpl() {
         --currentIndent;
-        if constexpr (sizeof...(args) > 0) {
-            line(close(kind), " // ", args...);
-        }
-        else {
-            line(close(kind));
-        }
+        Scope scope = openScopes.top();
+        openScopes.pop();
+        line(close(scope.kind), " // ", scope.name);
     }
 
     void line(auto const&... args) {
@@ -119,36 +147,27 @@ void graphgen::generate(Graph const& graph, std::ostream& ostream) {
 void graphgen::generate(Graph const& graph) { generate(graph, std::cout); }
 
 void Context::visit(Graph const& graph) {
-    beginScope(Brace, declare(graph));
+    auto scope = beginScope(Brace, declare(graph));
     commonDecls(graph);
+    line("rankdir = ", graph.rankdir());
     for (auto* vertex: graph.vertices()) {
         vertex->visit(*this);
     }
     for (auto& edge: graph.edges()) {
         generate(edge);
     }
-    endScope(Brace);
 }
 
 void Context::visit(Vertex const& vertex) {
-    beginScope(Bracket, vertex.id());
+    auto scope = beginScope(Bracket, vertex.id());
     commonDecls(vertex);
-    endScope(Bracket);
 }
-
-static constexpr StreamManip getFontName =
-    [](std::ostream& str, Vertex const& vertex) {
-    if (auto font = vertex.font()) {
-        str << std::quoted(*font);
-    }
-    else {
-        str << std::quoted(defaultFont());
-    }
-};
 
 void Context::commonDecls(Vertex const& vertex) {
     line("label = ", vertex.label());
-    line("fontname = ", getFontName(vertex));
+    if (auto font = vertex.font()) {
+        line("fontname = ", std::quoted(*font));
+    }
     line("shape = ", vertex.shape());
 }
 

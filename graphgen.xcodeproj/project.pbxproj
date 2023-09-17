@@ -13,14 +13,27 @@
 		F2A4394C2388313E36A0678C /* graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B389E414D9B013C640B70A54 /* graph.cpp */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		C1B4851764A2ABC9F3C88B57 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1BC7F5664CABED585FC423A6 /* graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = graph.h; path = include/graphgen/graph.h; sourceTree = "<group>"; };
 		1D3E3BA63F09E8D87BBF11E6 /* generate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = generate.cpp; path = lib/generate.cpp; sourceTree = "<group>"; };
-		2F152F7CF280F12E312495BC /* streammanip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = streammanip.h; path = lib/streammanip.h; sourceTree = "<group>"; };
+		2F152F7CF280F12E312495BC /* util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = util.h; path = lib/util.h; sourceTree = "<group>"; };
 		38CD731A7D1C188CBF43515A /* graphgen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = graphgen.h; path = include/graphgen/graphgen.h; sourceTree = "<group>"; };
 		3EEA3B7C875B1FAECBF9F1BC /* config.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = config.cpp; path = lib/config.cpp; sourceTree = "<group>"; };
 		499BCBB88DEA712AD011A9F8 /* generate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = generate.h; path = include/graphgen/generate.h; sourceTree = "<group>"; };
-		74F9DDFB8C0C792D7C28743B /* libgraphgen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libgraphgen.a; path = libgraphgen.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		74F9DDFB8C0C792D7C28743B /* libgraphgen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libgraphgen.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E21B736C01B01E839FA3D76 /* vertexvisitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = vertexvisitor.h; path = lib/vertexvisitor.h; sourceTree = "<group>"; };
 		B389E414D9B013C640B70A54 /* graph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = graph.cpp; path = lib/graph.cpp; sourceTree = "<group>"; };
 		DA5B89EED41D46600E1C482E /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = include/graphgen/config.h; sourceTree = "<group>"; };
@@ -36,19 +49,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		C1B4851764A2ABC9F3C88B57 /* Embed Libraries */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Libraries";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXGroup section */
 		5B213E4C4F97B57E9E6B548C /* graphgen */ = {
@@ -75,7 +75,7 @@
 				3EEA3B7C875B1FAECBF9F1BC /* config.cpp */,
 				1D3E3BA63F09E8D87BBF11E6 /* generate.cpp */,
 				B389E414D9B013C640B70A54 /* graph.cpp */,
-				2F152F7CF280F12E312495BC /* streammanip.h */,
+				2F152F7CF280F12E312495BC /* util.h */,
 				EAD0844CB8F3D7FE40022A8C /* vertexvisitor.cpp */,
 				8E21B736C01B01E839FA3D76 /* vertexvisitor.h */,
 			);
@@ -127,14 +127,21 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "graphgen" */;
 			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+				Base,
+			);
 			mainGroup = 5B213E4C4F97B57E9E6B548C /* graphgen */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				24B0628125635F73994530C1 /* libgraphgen.a */,
+				24B0628125635F73994530C1 /* graphgen */,
 			);
 		};
 /* End PBXProject section */
@@ -162,9 +169,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		22572A104422D74280D80050 /* Debug */ = {
@@ -199,9 +203,7 @@
 				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
 				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					NDEBUG,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = NDEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -216,10 +218,7 @@
 					"-Wno-unused-parameter",
 				);
 				SYMROOT = build/bin/Release;
-				SYSTEM_HEADER_SEARCH_PATHS = (
-					include,
-					"$(inherited)",
-				);
+				SYSTEM_HEADER_SEARCH_PATHS = "include $(inherited)";
 			};
 			name = Release;
 		};
@@ -247,17 +246,14 @@
 					"-Wno-unused-parameter",
 				);
 				SYMROOT = build/bin/Debug;
-				SYSTEM_HEADER_SEARCH_PATHS = (
-					include,
-					"$(inherited)",
-				);
+				SYSTEM_HEADER_SEARCH_PATHS = "include $(inherited)";
 			};
 			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1669564A19DA287C9B46CC8A /* Build configuration list for PBXNativeTarget "libgraphgen.a" */ = {
+		1669564A19DA287C9B46CC8A /* Build configuration list for PBXNativeTarget "graphgen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				22572A104422D74280D80050 /* Debug */,
@@ -276,6 +272,6 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-};
-rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
 }

@@ -76,14 +76,53 @@ private:
 /// Different shapes of vertices
 enum class VertexShape { Box, Ellipse, Oval, Circle, Point };
 
-/// Represents a vertex in the graph
-class Vertex {
+template <typename D>
+class VertexMixin {
 public:
-    virtual ~Vertex() = default;
-
     /// Allocates a vertex with ID \p id with `new` and returns it
     /// This can be passed directly to the parent graph which takes ownership
-    static Vertex* make(ID id);
+    static D* make(ID id) { return new D(id); }
+
+    /// Set the label of this vertex to \p text
+    D* label(std::string text, LabelKind kind = LabelKind::PlainText) {
+        derived()->_label = Label(std::move(text), kind);
+        return derived();
+    }
+
+    /// Set the shape of this vertex the default shape of all child vertices if
+    /// this vertex is a graph
+    D* shape(VertexShape shape) {
+        derived()->_shape = shape;
+        return derived();
+    }
+
+    /// Override the font used for this vertex
+    D* font(std::string fontname) {
+        derived()->_font = std::move(fontname);
+        return derived();
+    }
+
+private:
+    D* derived() { return static_cast<D*>(this); }
+};
+
+#define GRAPHGEN_USE_MIXIN(Type)                                               \
+    using Type::make;                                                          \
+    using Type::label;                                                         \
+    using Type::shape;                                                         \
+    using Type::font;
+
+/// Represents a vertex in the graph
+class Vertex: VertexMixin<Vertex> {
+    template <typename>
+    friend class VertexMixin;
+
+public:
+    GRAPHGEN_USE_MIXIN(VertexMixin<Vertex>)
+
+    Vertex(ID id): _id(id) {}
+
+    virtual ~Vertex() = default;
 
     /// \Returns the ID of the vertex
     ID id() const { return _id; }
@@ -91,29 +130,11 @@ public:
     /// \Returns the label of the vertex
     Label const& label() const { return _label; }
 
-    /// Set the label of this vertex to \p text
-    Vertex* label(std::string text, LabelKind kind = LabelKind::PlainText) {
-        _label = Label(std::move(text), kind);
-        return this;
-    }
-
     /// \Returns the shape of the vertex
     VertexShape shape() const { return _shape; }
 
-    /// Set the shape of this vertex
-    Vertex* shape(VertexShape shape) {
-        _shape = shape;
-        return this;
-    }
-
     /// \Returns the font used for the vertex if overriden
     std::optional<std::string> font() const { return _font; }
-
-    /// Override the font used for this vertex
-    Vertex* font(std::string fontname) {
-        _font = std::move(fontname);
-        return this;
-    }
 
     /// \Returns the parent vertex in the graph
     Vertex* parent() { return _parent; }
@@ -123,9 +144,6 @@ public:
 
     /// Visitor pattern. This is actually an implementation detail
     virtual void visit(VertexVisitor& visitor) const;
-
-protected:
-    Vertex(ID id): _id(id) {}
 
 private:
     friend class Graph;
@@ -148,32 +166,55 @@ struct Edge {
 /// `Tree` is not supported yet
 enum class GraphKind { Directed, Undirected, Tree };
 
+/// Flow direction of the graph
+enum class RankDir { TopBottom, LeftRight, BottomTop, RightLeft };
+
 ///
-class Graph: public Vertex {
+class Graph: public Vertex, public VertexMixin<Graph> {
+
 public:
-    explicit Graph(ID id, GraphKind kind): Vertex(id), _kind(kind) {}
+    GRAPHGEN_USE_MIXIN(VertexMixin<Graph>)
+
+    using Vertex::Vertex;
 
     /// Adds \p vertex to the graph
-    /// \Returns the ID of the added vertex
     /// This function expects the pointer to be allocated with `new` and will
     /// take ownership. This exists for clean callsites:
     /// ```
     ///  graph.add(new Vertex(...));
     /// ```
-    ID add(Vertex* vertex) {
+    Graph* add(Vertex* vertex) {
         _vertices.push_back(std::unique_ptr<Vertex>(vertex));
         vertex->setParent(this);
-        return vertex->id();
+        return this;
     }
 
     /// \overload for `unique_ptr<Vertex>`
-    ID add(std::unique_ptr<Vertex> vertex) { return add(vertex.release()); }
+    Graph* add(std::unique_ptr<Vertex> vertex) { return add(vertex.release()); }
 
     /// Adds the edge \p edge to the graph
-    void add(Edge edge) { _edges.push_back(edge); }
+    Graph* add(Edge edge) {
+        _edges.push_back(edge);
+        return this;
+    }
 
     /// \Returns the kind of the graph
     GraphKind kind() const { return _kind; }
+
+    /// Sets the kind of this graph to \p kind
+    Graph* kind(GraphKind kind) {
+        _kind = kind;
+        return this;
+    }
+
+    /// \Returns the rank direction of this graph
+    RankDir rankdir() const { return _rankDir; }
+
+    /// Sets the rank direction of this graph
+    Graph* rankdir(RankDir dir) {
+        _rankDir = dir;
+        return this;
+    }
 
     /// \Returns a view over the vertices of this graph
     auto vertices() const {
@@ -188,7 +229,8 @@ public:
     void visit(VertexVisitor& visitor) const override;
 
 private:
-    GraphKind _kind;
+    GraphKind _kind{};
+    RankDir _rankDir{};
     std::vector<std::unique_ptr<Vertex>> _vertices;
     std::vector<Edge> _edges;
     bool _isSubgraph = false;

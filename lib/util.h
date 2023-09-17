@@ -1,11 +1,22 @@
-#ifndef GRAPHGEN_STREAMMANIP_H_
-#define GRAPHGEN_STREAMMANIP_H_
+#ifndef GRAPHGEN_UTIL_H_
+#define GRAPHGEN_UTIL_H_
 
 #include <concepts>
 #include <iosfwd>
 #include <type_traits>
 
 namespace graphgen {
+
+template <typename F>
+struct ScopeGuard {
+    constexpr ScopeGuard(F f): function(f) {}
+
+    ScopeGuard(ScopeGuard&&) = delete;
+
+    constexpr ~ScopeGuard() { std::invoke(function); }
+
+    F function;
+};
 
 template <typename T>
 struct ObjWrapper {
@@ -58,4 +69,4 @@ private:
 
 } // namespace graphgen
 
-#endif // GRAPHGEN_STREAMMANIP_H_
+#endif // GRAPHGEN_UTIL_H_

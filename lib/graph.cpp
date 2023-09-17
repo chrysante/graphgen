@@ -34,8 +34,6 @@ void Label::emit(std::ostream& str) const {
     }
 }
 
-Vertex* Vertex::make(ID id) { return new Vertex(id); }
-
 void Vertex::visit(VertexVisitor& visitor) const { visitor.visit(*this); }
 
 void Graph::visit(VertexVisitor& visitor) const { visitor.visit(*this); }
