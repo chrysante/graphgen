@@ -176,6 +176,8 @@ public:
     GRAPHGEN_USE_MIXIN(VertexMixin<Graph>)
 
     using Vertex::Vertex;
+    
+    Graph(): Vertex(ID(this)) {}
 
     /// Adds \p vertex to the graph
     /// This function expects the pointer to be allocated with `new` and will
