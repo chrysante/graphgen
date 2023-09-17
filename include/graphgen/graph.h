@@ -76,6 +76,7 @@ private:
 /// Different shapes of vertices
 enum class VertexShape { Box, Ellipse, Oval, Circle, Point };
 
+/// Mixin class to allow chaining setters in both `Vertex` and `Graph`
 template <typename D>
 class VertexMixin {
 public:
@@ -88,7 +89,11 @@ public:
 
     /// Set the label of this vertex to \p text
     D* label(std::string text, LabelKind kind = LabelKind::PlainText) {
-        derived()->_label = Label(std::move(text), kind);
+        return label(Label(std::move(text), kind));
+    }
+
+    D* label(Label label) {
+        derived()->_label = std::move(label);
         return derived();
     }
 
