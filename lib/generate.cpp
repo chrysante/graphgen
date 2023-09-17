@@ -1,13 +1,13 @@
-#include "Generate.h"
+#include "graphgen/generate.h"
 
 #include <array>
 #include <iomanip>
 #include <iostream>
 
-#include "Config.h"
-#include "Graph.h"
-#include "StreamManip.h"
-#include "VertexVisitor.h"
+#include "config.h"
+#include "graph.h"
+#include "streammanip.h"
+#include "vertexvisitor.h"
 
 using namespace graphgen;
 
@@ -127,7 +127,7 @@ void Context::visit(Graph const& graph) {
     for (auto& edge: graph.edges()) {
         generate(edge);
     }
-    endScope(Brace, graph.kind());
+    endScope(Brace);
 }
 
 void Context::visit(Vertex const& vertex) {

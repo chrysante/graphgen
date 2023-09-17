@@ -1,10 +1,10 @@
-#include "Graph.h"
+#include "graphgen/graph.h"
 
 #include <iomanip>
 #include <ostream>
 
-#include "Config.h"
-#include "VertexVisitor.h"
+#include "config.h"
+#include "vertexvisitor.h"
 
 using namespace graphgen;
 
@@ -34,7 +34,7 @@ void Label::emit(std::ostream& str) const {
     }
 }
 
-Vertex::Vertex(ID id, Label label): _id(id), _label(std::move(label)) {}
+Vertex* Vertex::make(ID id) { return new Vertex(id); }
 
 void Vertex::visit(VertexVisitor& visitor) const { visitor.visit(*this); }
 

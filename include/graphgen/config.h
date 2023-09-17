@@ -9,7 +9,7 @@ namespace graphgen {
 std::string defaultFont();
 
 /// Set the default font to \p fontname
-void setDefaultFont(std::string fontname);
+void defaultFont(std::string fontname);
 
 } // namespace graphgen
 

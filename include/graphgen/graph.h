@@ -18,11 +18,20 @@ class VertexVisitor;
 /// Vertex identifier. This is used to identify vertices when declaring edges
 class ID {
 public:
-    ID(void const volatile* ptr): _id(reinterpret_cast<uintptr_t>(ptr)) {}
+    /// Construct an ID from a `void*`. Can be used to easily derive unique IDs
+    /// if vertices have address identity
+    explicit ID(void const volatile* ptr):
+        _id(reinterpret_cast<uintptr_t>(ptr)) {}
 
-    ID(int id): _id(id) {}
-
-    ID(size_t id): _id(id) {}
+    /// Construct an ID from an integer.
+    /// @{
+    ID(int id): _id(static_cast<uintptr_t>(id)) {}
+    ID(unsigned int id): _id(static_cast<uintptr_t>(id)) {}
+    ID(long id): _id(static_cast<uintptr_t>(id)) {}
+    ID(unsigned long id): _id(static_cast<uintptr_t>(id)) {}
+    ID(long long id): _id(static_cast<uintptr_t>(id)) {}
+    ID(unsigned long long id): _id(static_cast<uintptr_t>(id)) {}
+    /// @}
 
     /// \Returns the raw value of the ID
     uintptr_t raw() const { return _id; }
@@ -42,15 +51,7 @@ enum class LabelKind { PlainText, HTML };
 class Label {
 public:
     /// Constructs a label from \p text with label kind \p kind
-    Label(std::string text, LabelKind kind = LabelKind::PlainText);
-
-    /// \overload for `std::string_view`
-    Label(std::string_view text, LabelKind kind = LabelKind::PlainText):
-        Label(std::string(text), kind) {}
-
-    /// \overload for `char const*`
-    Label(char const* text, LabelKind kind = LabelKind::PlainText):
-        Label(std::string(text), kind) {}
+    Label(std::string text = {}, LabelKind kind = LabelKind::PlainText);
 
     ///
     Label(std::function<void(std::ostream&)> generator,
@@ -78,9 +79,11 @@ enum class VertexShape { Box, Ellipse, Oval, Circle, Point };
 /// Represents a vertex in the graph
 class Vertex {
 public:
-    Vertex(ID id, Label label);
-
     virtual ~Vertex() = default;
+
+    /// Allocates a vertex with ID \p id with `new` and returns it
+    /// This can be passed directly to the parent graph which takes ownership
+    static Vertex* make(ID id);
 
     /// \Returns the ID of the vertex
     ID id() const { return _id; }
@@ -88,11 +91,17 @@ public:
     /// \Returns the label of the vertex
     Label const& label() const { return _label; }
 
+    /// Set the label of this vertex to \p text
+    Vertex* label(std::string text, LabelKind kind = LabelKind::PlainText) {
+        _label = Label(std::move(text), kind);
+        return this;
+    }
+
     /// \Returns the shape of the vertex
     VertexShape shape() const { return _shape; }
 
     /// Set the shape of this vertex
-    Vertex* setShape(VertexShape shape) {
+    Vertex* shape(VertexShape shape) {
         _shape = shape;
         return this;
     }
@@ -101,7 +110,7 @@ public:
     std::optional<std::string> font() const { return _font; }
 
     /// Override the font used for this vertex
-    Vertex* setFont(std::string fontname) {
+    Vertex* font(std::string fontname) {
         _font = std::move(fontname);
         return this;
     }
@@ -115,8 +124,13 @@ public:
     /// Visitor pattern. This is actually an implementation detail
     virtual void visit(VertexVisitor& visitor) const;
 
+protected:
+    Vertex(ID id): _id(id) {}
+
 private:
     friend class Graph;
+    void setParent(Vertex* parent) { _parent = parent; }
+
     Vertex* _parent = nullptr;
     ID _id;
     Label _label;
@@ -137,8 +151,7 @@ enum class GraphKind { Directed, Undirected, Tree };
 ///
 class Graph: public Vertex {
 public:
-    explicit Graph(ID id, Label label, GraphKind kind):
-        Vertex(id, std::move(label)), _kind(kind) {}
+    explicit Graph(ID id, GraphKind kind): Vertex(id), _kind(kind) {}
 
     /// Adds \p vertex to the graph
     /// \Returns the ID of the added vertex
@@ -149,7 +162,7 @@ public:
     /// ```
     ID add(Vertex* vertex) {
         _vertices.push_back(std::unique_ptr<Vertex>(vertex));
-        vertex->_parent = this;
+        vertex->setParent(this);
         return vertex->id();
     }
 

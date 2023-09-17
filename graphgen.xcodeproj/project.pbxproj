@@ -3,32 +3,32 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DD23A58F2AB5E0970045D730 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD23A58E2AB5E0970045D730 /* main.cpp */; };
+		22D609FE6724AF70A94BE83E /* generate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D3E3BA63F09E8D87BBF11E6 /* generate.cpp */; };
+		3DE1C03437A37CA671A27E74 /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3EEA3B7C875B1FAECBF9F1BC /* config.cpp */; };
+		55C89904F7B234F6EED94744 /* vertexvisitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EAD0844CB8F3D7FE40022A8C /* vertexvisitor.cpp */; };
+		F2A4394C2388313E36A0678C /* graph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B389E414D9B013C640B70A54 /* graph.cpp */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		DD23A5892AB5E0970045D730 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		DD23A58B2AB5E0970045D730 /* graphgen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = graphgen; sourceTree = BUILT_PRODUCTS_DIR; };
-		DD23A58E2AB5E0970045D730 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		1BC7F5664CABED585FC423A6 /* graph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = graph.h; path = include/graphgen/graph.h; sourceTree = "<group>"; };
+		1D3E3BA63F09E8D87BBF11E6 /* generate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = generate.cpp; path = lib/generate.cpp; sourceTree = "<group>"; };
+		2F152F7CF280F12E312495BC /* streammanip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = streammanip.h; path = lib/streammanip.h; sourceTree = "<group>"; };
+		38CD731A7D1C188CBF43515A /* graphgen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = graphgen.h; path = include/graphgen/graphgen.h; sourceTree = "<group>"; };
+		3EEA3B7C875B1FAECBF9F1BC /* config.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = config.cpp; path = lib/config.cpp; sourceTree = "<group>"; };
+		499BCBB88DEA712AD011A9F8 /* generate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = generate.h; path = include/graphgen/generate.h; sourceTree = "<group>"; };
+		74F9DDFB8C0C792D7C28743B /* libgraphgen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libgraphgen.a; path = libgraphgen.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E21B736C01B01E839FA3D76 /* vertexvisitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = vertexvisitor.h; path = lib/vertexvisitor.h; sourceTree = "<group>"; };
+		B389E414D9B013C640B70A54 /* graph.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = graph.cpp; path = lib/graph.cpp; sourceTree = "<group>"; };
+		DA5B89EED41D46600E1C482E /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = include/graphgen/config.h; sourceTree = "<group>"; };
+		EAD0844CB8F3D7FE40022A8C /* vertexvisitor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vertexvisitor.cpp; path = lib/vertexvisitor.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		DD23A5882AB5E0970045D730 /* Frameworks */ = {
+		282E0DEB2B9EE01DAD0B842B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -37,41 +37,81 @@
 		};
 /* End PBXFrameworksBuildPhase section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		C1B4851764A2ABC9F3C88B57 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXGroup section */
-		DD23A5822AB5E0970045D730 = {
+		5B213E4C4F97B57E9E6B548C /* graphgen */ = {
 			isa = PBXGroup;
 			children = (
-				DD23A58D2AB5E0970045D730 /* graphgen */,
-				DD23A58C2AB5E0970045D730 /* Products */,
+				5E8C725002DF100215175890 /* include */,
+				8D815E5679726A08CBAA0496 /* lib */,
+				A6C936B49B3FADE6EA134CF4 /* Products */,
 			);
+			name = graphgen;
 			sourceTree = "<group>";
 		};
-		DD23A58C2AB5E0970045D730 /* Products */ = {
+		5E8C725002DF100215175890 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				DD23A58B2AB5E0970045D730 /* graphgen */,
+				E40FBAB32C809EE5711F70F3 /* graphgen */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		8D815E5679726A08CBAA0496 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				3EEA3B7C875B1FAECBF9F1BC /* config.cpp */,
+				1D3E3BA63F09E8D87BBF11E6 /* generate.cpp */,
+				B389E414D9B013C640B70A54 /* graph.cpp */,
+				2F152F7CF280F12E312495BC /* streammanip.h */,
+				EAD0844CB8F3D7FE40022A8C /* vertexvisitor.cpp */,
+				8E21B736C01B01E839FA3D76 /* vertexvisitor.h */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		A6C936B49B3FADE6EA134CF4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				74F9DDFB8C0C792D7C28743B /* libgraphgen.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DD23A58D2AB5E0970045D730 /* graphgen */ = {
+		E40FBAB32C809EE5711F70F3 /* graphgen */ = {
 			isa = PBXGroup;
 			children = (
-				DD23A58E2AB5E0970045D730 /* main.cpp */,
+				DA5B89EED41D46600E1C482E /* config.h */,
+				499BCBB88DEA712AD011A9F8 /* generate.h */,
+				1BC7F5664CABED585FC423A6 /* graph.h */,
+				38CD731A7D1C188CBF43515A /* graphgen.h */,
 			);
-			path = graphgen;
+			name = graphgen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DD23A58A2AB5E0970045D730 /* graphgen */ = {
+		24B0628125635F73994530C1 /* graphgen */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DD23A5922AB5E0980045D730 /* Build configuration list for PBXNativeTarget "graphgen" */;
+			buildConfigurationList = 1669564A19DA287C9B46CC8A /* Build configuration list for PBXNativeTarget "graphgen" */;
 			buildPhases = (
-				DD23A5872AB5E0970045D730 /* Sources */,
-				DD23A5882AB5E0970045D730 /* Frameworks */,
-				DD23A5892AB5E0970045D730 /* CopyFiles */,
+				98158E8B9B8660BD1CF304CB /* Resources */,
+				01C2A7E205337A1486A01E22 /* Sources */,
+				282E0DEB2B9EE01DAD0B842B /* Frameworks */,
+				C1B4851764A2ABC9F3C88B57 /* Embed Libraries */,
 			);
 			buildRules = (
 			);
@@ -79,200 +119,163 @@
 			);
 			name = graphgen;
 			productName = graphgen;
-			productReference = DD23A58B2AB5E0970045D730 /* graphgen */;
-			productType = "com.apple.product-type.tool";
+			productReference = 74F9DDFB8C0C792D7C28743B /* libgraphgen.a */;
+			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		DD23A5832AB5E0970045D730 /* Project object */ = {
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
-			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-					DD23A58A2AB5E0970045D730 = {
-						CreatedOnToolsVersion = 14.3;
-					};
-				};
-			};
-			buildConfigurationList = DD23A5862AB5E0970045D730 /* Build configuration list for PBXProject "graphgen" */;
-			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-				Base,
-			);
-			mainGroup = DD23A5822AB5E0970045D730;
-			productRefGroup = DD23A58C2AB5E0970045D730 /* Products */;
+			buildConfigurationList = 1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "graphgen" */;
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 1;
+			mainGroup = 5B213E4C4F97B57E9E6B548C /* graphgen */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DD23A58A2AB5E0970045D730 /* graphgen */,
+				24B0628125635F73994530C1 /* libgraphgen.a */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		98158E8B9B8660BD1CF304CB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		DD23A5872AB5E0970045D730 /* Sources */ = {
+		01C2A7E205337A1486A01E22 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD23A58F2AB5E0970045D730 /* main.cpp in Sources */,
+				3DE1C03437A37CA671A27E74 /* config.cpp in Sources */,
+				22D609FE6724AF70A94BE83E /* generate.cpp in Sources */,
+				F2A4394C2388313E36A0678C /* graph.cpp in Sources */,
+				55C89904F7B234F6EED94744 /* vertexvisitor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
-		DD23A5902AB5E0970045D730 /* Debug */ = {
+		22572A104422D74280D80050 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
+				CONFIGURATION_BUILD_DIR = build/bin/Debug;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = graphgen;
+			};
+			name = Debug;
+		};
+		5B8D090A1EF8CABC5D9C6F4A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CONFIGURATION_BUILD_DIR = build/bin/Release;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				INSTALL_PATH = /usr/local/lib;
+				PRODUCT_NAME = graphgen;
+			};
+			name = Release;
+		};
+		E601E15514A835476DE98F95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++2a";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
+					NDEBUG,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OBJROOT = build/obj/Release/Release/graphgen;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-Wconversion",
+					"-Wall",
+					"-Wpedantic",
+					"-Wold-style-cast",
+					"-Wno-sign-compare",
+					"-Wno-unused-parameter",
+				);
+				SYMROOT = build/bin/Release;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					include,
 					"$(inherited)",
 				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
 			};
-			name = Debug;
+			name = Release;
 		};
-		DD23A5912AB5E0970045D730 /* Release */ = {
+		E9A7845BF66433CD6B4EA29B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++2a";
+				CONFIGURATION_BUILD_DIR = "$(SYMROOT)";
+				CONFIGURATION_TEMP_DIR = "$(OBJROOT)";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				SDKROOT = macosx;
-			};
-			name = Release;
-		};
-		DD23A5932AB5E0980045D730 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				OBJROOT = build/obj/Debug/Debug/graphgen;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"-Wconversion",
+					"-Wall",
+					"-Wpedantic",
+					"-Wold-style-cast",
+					"-Wno-sign-compare",
+					"-Wno-unused-parameter",
+				);
+				SYMROOT = build/bin/Debug;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					include,
+					"$(inherited)",
+				);
 			};
 			name = Debug;
-		};
-		DD23A5942AB5E0980045D730 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DD23A5862AB5E0970045D730 /* Build configuration list for PBXProject "graphgen" */ = {
+		1669564A19DA287C9B46CC8A /* Build configuration list for PBXNativeTarget "libgraphgen.a" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DD23A5902AB5E0970045D730 /* Debug */,
-				DD23A5912AB5E0970045D730 /* Release */,
+				22572A104422D74280D80050 /* Debug */,
+				5B8D090A1EF8CABC5D9C6F4A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		DD23A5922AB5E0980045D730 /* Build configuration list for PBXNativeTarget "graphgen" */ = {
+		1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "graphgen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DD23A5932AB5E0980045D730 /* Debug */,
-				DD23A5942AB5E0980045D730 /* Release */,
+				E9A7845BF66433CD6B4EA29B /* Debug */,
+				E601E15514A835476DE98F95 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-	};
-	rootObject = DD23A5832AB5E0970045D730 /* Project object */;
+};
+rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
 }
