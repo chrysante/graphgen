@@ -191,7 +191,7 @@ void Context::commonDecls(Vertex const& vertex) {
 }
 
 static StreamManip makeEdge = [](std::ostream& str, Edge edge, GraphKind kind) {
-    str << edge.to;
+    str << edge.from;
     switch (kind) {
     case GraphKind::Directed:
         str << " -> ";
@@ -203,7 +203,7 @@ static StreamManip makeEdge = [](std::ostream& str, Edge edge, GraphKind kind) {
         assert(false);
         break;
     }
-    str << edge.from;
+    str << edge.to;
 };
 
 void Context::generate(Edge edge) { line(makeEdge(edge, graph.kind())); }
