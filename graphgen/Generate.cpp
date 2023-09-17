@@ -4,8 +4,10 @@
 #include <iomanip>
 #include <iostream>
 
+#include "Config.h"
 #include "Graph.h"
 #include "StreamManip.h"
+#include "VertexVisitor.h"
 
 using namespace graphgen;
 
@@ -21,6 +23,22 @@ static std::ostream& operator<<(std::ostream& str, GraphKind kind) {
         return str << "graph";
     case GraphKind::Tree:
         assert(false);
+    }
+}
+
+static std::ostream& operator<<(std::ostream& str, VertexShape shape) {
+    using enum VertexShape;
+    switch (shape) {
+    case Box:
+        return str << std::quoted("box");
+    case Ellipse:
+        return str << std::quoted("ellipse");
+    case Oval:
+        return str << std::quoted("oval");
+    case Circle:
+        return str << std::quoted("circle");
+    case Point:
+        return str << std::quoted("point");
     }
 }
 
@@ -118,9 +136,20 @@ void Context::visit(Vertex const& vertex) {
     endScope(Bracket);
 }
 
+static constexpr StreamManip getFontName =
+    [](std::ostream& str, Vertex const& vertex) {
+    if (auto font = vertex.font()) {
+        str << std::quoted(*font);
+    }
+    else {
+        str << std::quoted(defaultFont());
+    }
+};
+
 void Context::commonDecls(Vertex const& vertex) {
     line("label = ", vertex.label());
-    line("fontname = ", std::quoted(vertex.font()));
+    line("fontname = ", getFontName(vertex));
+    line("shape = ", vertex.shape());
 }
 
 static StreamManip makeEdge = [](std::ostream& str, Edge edge, GraphKind kind) {

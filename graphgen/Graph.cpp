@@ -3,25 +3,17 @@
 #include <iomanip>
 #include <ostream>
 
+#include "Config.h"
+#include "VertexVisitor.h"
+
 using namespace graphgen;
 
-static std::string& defFont() {
-    static std::string font = "SF Mono";
-    return font;
+static auto makeGenerator(std::string text) {
+    return [text = std::move(text)](std::ostream& str) { str << text; };
 }
 
-std::string graphgen::defaultFont() { return defFont(); }
-
-void graphgen::setDefaultFont(std::string fontname) {
-    defFont() = std::move(fontname);
-}
-
-static auto makeGenerator(std::string label) {
-    return [label = std::move(label)](std::ostream& str) { str << label; };
-}
-
-Label::Label(std::string label, LabelKind kind):
-    generator(makeGenerator(std::move(label))), _kind(kind) {}
+Label::Label(std::string text, LabelKind kind):
+    generator(makeGenerator(std::move(text))), _kind(kind) {}
 
 Label::Label(std::function<void(std::ostream&)> generator, LabelKind kind):
     generator(std::move(generator)), _kind(kind) {}
@@ -42,6 +34,8 @@ void Label::emit(std::ostream& str) const {
     }
 }
 
-Vertex::Vertex(ID id, Label label): _id(id), _label(std::move(label)) {
-    setFont(defaultFont());
-}
+Vertex::Vertex(ID id, Label label): _id(id), _label(std::move(label)) {}
+
+void Vertex::visit(VertexVisitor& visitor) const { visitor.visit(*this); }
+
+void Graph::visit(VertexVisitor& visitor) const { visitor.visit(*this); }
