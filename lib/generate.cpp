@@ -190,6 +190,26 @@ void Context::commonDecls(Vertex const& vertex) {
     line("shape = ", vertex.shape());
 }
 
+static std::string_view toString(Color color) {
+    using enum Color;
+    switch (color) {
+    case Black:
+        return "black";
+    case White:
+        return "white";
+    case Red:
+        return "red";
+    case Green:
+        return "green";
+    case Yellow:
+        return "yellow";
+    case Blue:
+        return "blue";
+    case Purple:
+        return "purple";
+    }
+}
+
 static StreamManip makeEdge = [](std::ostream& str, Edge edge, GraphKind kind) {
     str << edge.from;
     switch (kind) {
@@ -204,6 +224,9 @@ static StreamManip makeEdge = [](std::ostream& str, Edge edge, GraphKind kind) {
         break;
     }
     str << edge.to;
+    if (edge.color) {
+        str << " [color=\"" << toString(*edge.color) << "\"]";
+    }
 };
 
 void Context::generate(Edge edge) { line(makeEdge(edge, graph.kind())); }

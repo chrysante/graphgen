@@ -4,10 +4,13 @@
 #include <functional>
 #include <iosfwd>
 #include <memory>
+#include <optional>
 #include <ranges>
 #include <span>
 #include <string>
 #include <vector>
+
+#include <graphgen/Style.h>
 
 namespace graphgen {
 
@@ -164,8 +167,15 @@ private:
 
 /// Represents an edge between the vertices with IDs \p from and \p to
 struct Edge {
+    /// The ID of the start vertex of the edge. In undirected graphs `from` and
+    /// `to` are interchangable
     ID from;
+
+    /// The ID of the end vertex of the edge
     ID to;
+
+    /// The color in which the edge shall be drawn
+    std::optional<Color> color = {};
 };
 
 /// Different kinds of graphs
