@@ -4,7 +4,16 @@
 namespace graphgen {
 
 /// List of colors
-enum class Color { Black, White, Red, Green, Yellow, Blue, Purple };
+enum class Color { Black, White, Red, Green, Yellow, Blue, Magenta, Purple };
+
+/// List of styles
+enum class Style {
+    Dashed,
+    Dotted,
+    Solid,
+    Invisible,
+    Bold,
+};
 
 } // namespace graphgen
 

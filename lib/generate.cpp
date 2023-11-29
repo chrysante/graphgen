@@ -205,8 +205,26 @@ static std::string_view toString(Color color) {
         return "yellow";
     case Blue:
         return "blue";
+    case Magenta:
+        return "magenta";
     case Purple:
         return "purple";
+    }
+}
+
+static std::string_view toString(Style style) {
+    using enum Style;
+    switch (style) {
+    case Dashed:
+        return "dashed";
+    case Dotted:
+        return "dotted";
+    case Solid:
+        return "solid";
+    case Invisible:
+        return "invis";
+    case Bold:
+        return "bold";
     }
 }
 
@@ -226,6 +244,9 @@ static StreamManip makeEdge = [](std::ostream& str, Edge edge, GraphKind kind) {
     str << edge.to;
     if (edge.color) {
         str << " [color=\"" << toString(*edge.color) << "\"]";
+    }
+    if (edge.style) {
+        str << " [style=\"" << toString(*edge.style) << "\"]";
     }
 };
 

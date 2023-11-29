@@ -176,6 +176,9 @@ struct Edge {
 
     /// The color in which the edge shall be drawn
     std::optional<Color> color = {};
+    
+    /// Optional style attribute
+    std::optional<Style> style = {};
 };
 
 /// Different kinds of graphs
