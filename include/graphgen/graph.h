@@ -119,6 +119,24 @@ public:
         return derived();
     }
 
+    /// \Returns the color used for the vertex if overriden
+    std::optional<Color> color() const { return derived()->_color; }
+    
+    /// Override the color used for this vertex
+    D* color(std::optional<Color> color) {
+        derived()->_color = color;
+        return derived();
+    }
+    
+    /// \Returns the style attribute used for the vertex if overriden
+    std::optional<Style> style() const { return derived()->_style; }
+    
+    /// Override the style attribute used for this vertex
+    D* style(std::optional<Style> style) {
+        derived()->_style = style;
+        return derived();
+    }
+    
 private:
     D* derived() { return static_cast<D*>(this); }
     D const* derived() const { return static_cast<D const*>(this); }
@@ -128,7 +146,9 @@ private:
     using Type::make;                                                          \
     using Type::label;                                                         \
     using Type::shape;                                                         \
-    using Type::font;
+    using Type::font;                                                          \
+    using Type::color;                                                         \
+    using Type::style;
 
 /// Represents a vertex in the graph
 class Vertex: public VertexMixin<Vertex> {
@@ -163,6 +183,8 @@ private:
     Label _label;
     VertexShape _shape{};
     std::optional<std::string> _font;
+    std::optional<Color> _color;
+    std::optional<Style> _style;
 };
 
 /// Represents an edge between the vertices with IDs \p from and \p to

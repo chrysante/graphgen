@@ -59,7 +59,7 @@ static std::ostream& operator<<(std::ostream& str, VertexShape shape) {
     }
 }
 
-StreamManip declare = [](std::ostream& str, Graph const& graph) {
+static StreamManip declare = [](std::ostream& str, Graph const& graph) {
     if (graph.parent()) {
         str << "subgraph cluster_" << graph.id();
     }
@@ -67,6 +67,44 @@ StreamManip declare = [](std::ostream& str, Graph const& graph) {
         str << graph.kind();
     }
 };
+
+static std::string_view toString(Color color) {
+    using enum Color;
+    switch (color) {
+    case Black:
+        return "black";
+    case White:
+        return "white";
+    case Red:
+        return "red";
+    case Green:
+        return "green";
+    case Yellow:
+        return "yellow";
+    case Blue:
+        return "blue";
+    case Magenta:
+        return "magenta";
+    case Purple:
+        return "purple";
+    }
+}
+
+static std::string_view toString(Style style) {
+    using enum Style;
+    switch (style) {
+    case Dashed:
+        return "dashed";
+    case Dotted:
+        return "dotted";
+    case Solid:
+        return "solid";
+    case Invisible:
+        return "invis";
+    case Bold:
+        return "bold";
+    }
+}
 
 namespace {
 
@@ -188,43 +226,11 @@ void Context::commonDecls(Vertex const& vertex) {
     line("label = ", vertex.label());
     line("fontname = ", std::quoted(getFont(vertex)));
     line("shape = ", vertex.shape());
-}
-
-static std::string_view toString(Color color) {
-    using enum Color;
-    switch (color) {
-    case Black:
-        return "black";
-    case White:
-        return "white";
-    case Red:
-        return "red";
-    case Green:
-        return "green";
-    case Yellow:
-        return "yellow";
-    case Blue:
-        return "blue";
-    case Magenta:
-        return "magenta";
-    case Purple:
-        return "purple";
+    if (vertex.color()) {
+        line("color = ", toString(*vertex.color()));
     }
-}
-
-static std::string_view toString(Style style) {
-    using enum Style;
-    switch (style) {
-    case Dashed:
-        return "dashed";
-    case Dotted:
-        return "dotted";
-    case Solid:
-        return "solid";
-    case Invisible:
-        return "invis";
-    case Bold:
-        return "bold";
+    if (vertex.style()) {
+        line("style = ", toString(*vertex.style()));
     }
 }
 
