@@ -38,7 +38,9 @@ public:
 
     /// \Returns the raw value of the ID
     uintptr_t raw() const { return _id; }
-
+    
+    bool operator==(ID const&) const = default;
+    
 private:
     uintptr_t _id;
 };
@@ -280,6 +282,13 @@ private:
 };
 
 } // namespace graphgen
+
+template <>
+struct std::hash<graphgen::ID> {
+    std::size_t operator()(graphgen::ID id) const {
+        return std::hash<uintptr_t>{}(id.raw());
+    }
+};
 
 #undef GRAPHGEN_USE_MIXIN
 
