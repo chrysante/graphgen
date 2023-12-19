@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <stack>
+#include <cassert>
 
 #include "config.h"
 #include "graph.h"
