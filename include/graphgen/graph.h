@@ -38,9 +38,9 @@ public:
 
     /// \Returns the raw value of the ID
     uintptr_t raw() const { return _id; }
-    
+
     bool operator==(ID const&) const = default;
-    
+
 private:
     uintptr_t _id;
 };
@@ -123,22 +123,22 @@ public:
 
     /// \Returns the color used for the vertex if overriden
     std::optional<Color> color() const { return derived()->_color; }
-    
+
     /// Override the color used for this vertex
     D* color(std::optional<Color> color) {
         derived()->_color = color;
         return derived();
     }
-    
+
     /// \Returns the style attribute used for the vertex if overriden
     std::optional<Style> style() const { return derived()->_style; }
-    
+
     /// Override the style attribute used for this vertex
     D* style(std::optional<Style> style) {
         derived()->_style = style;
         return derived();
     }
-    
+
 private:
     D* derived() { return static_cast<D*>(this); }
     D const* derived() const { return static_cast<D const*>(this); }
@@ -200,7 +200,7 @@ struct Edge {
 
     /// The color in which the edge shall be drawn
     std::optional<Color> color = {};
-    
+
     /// Optional style attribute
     std::optional<Style> style = {};
 };

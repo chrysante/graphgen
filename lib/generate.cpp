@@ -1,12 +1,13 @@
 #include "graphgen/generate.h"
 
 #include <array>
+#include <cassert>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <stack>
-#include <cassert>
 
+#include "common.h"
 #include "config.h"
 #include "graph.h"
 #include "util.h"
@@ -26,7 +27,7 @@ static std::ostream& operator<<(std::ostream& str, GraphKind kind) {
     case Undirected:
         return str << "graph";
     case Tree:
-        assert(false);
+        unreachable();
     }
 }
 
