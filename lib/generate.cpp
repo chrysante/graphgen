@@ -1,11 +1,11 @@
 #include "graphgen/generate.h"
 
 #include <array>
+#include <cassert>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <stack>
-#include <cassert>
 
 #include "config.h"
 #include "graph.h"
@@ -209,9 +209,7 @@ void graphgen::generate(Graph const& graph, std::ostream& ostream) {
     Context(graph, ostream).run();
 }
 
-void graphgen::generate(Graph const& graph) { 
-    generate(graph, std::cout);
-}
+void graphgen::generate(Graph const& graph) { generate(graph, std::cout); }
 
 void Context::visit(Graph const& graph) {
     auto scope = beginScope(graph, Brace, declare(graph));
