@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#include <graphgen/Style.h>
+#include <graphgen/style.h>
 
 namespace graphgen {
 

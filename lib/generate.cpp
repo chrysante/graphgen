@@ -29,6 +29,7 @@ static std::ostream& operator<<(std::ostream& str, GraphKind kind) {
     case Tree:
         unreachable();
     }
+    unreachable();
 }
 
 static std::ostream& operator<<(std::ostream& str, RankDir dir) {
@@ -43,6 +44,7 @@ static std::ostream& operator<<(std::ostream& str, RankDir dir) {
     case RightLeft:
         return str << "RL";
     }
+    unreachable();
 }
 
 static std::ostream& operator<<(std::ostream& str, VertexShape shape) {
@@ -59,6 +61,7 @@ static std::ostream& operator<<(std::ostream& str, VertexShape shape) {
     case Point:
         return str << std::quoted("point");
     }
+    unreachable();
 }
 
 static StreamManip declare = [](std::ostream& str, Graph const& graph) {
@@ -90,6 +93,7 @@ static std::string_view toString(Color color) {
     case Purple:
         return "purple";
     }
+    unreachable();
 }
 
 static std::string_view toString(Style style) {
@@ -106,6 +110,7 @@ static std::string_view toString(Style style) {
     case Bold:
         return "bold";
     }
+    unreachable();
 }
 
 namespace {
