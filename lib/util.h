@@ -7,6 +7,8 @@
 
 namespace graphgen {
 
+[[noreturn]] inline void unreachable() {}
+
 template <typename F>
 struct ScopeGuard {
     constexpr ScopeGuard(F f): function(f) {}
