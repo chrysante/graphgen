@@ -7,14 +7,6 @@
 
 namespace graphgen {
 
-[[noreturn]] inline void unreachable() {
-#if defined(__GNUC__) // GCC, Clang, ICC
-    __builtin_unreachable();
-#elif defined(_MSC_VER) // MSVC
-    __assume(false);
-#endif
-}
-
 template <typename F>
 struct ScopeGuard {
     constexpr ScopeGuard(F f): function(f) {}
