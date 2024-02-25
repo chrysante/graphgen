@@ -37,7 +37,8 @@ ObjWrapper(T&) -> ObjWrapper<T&>;
 template <typename F>
 class StreamManip {
 public:
-    constexpr StreamManip() requires std::is_default_constructible_v<F>
+    constexpr StreamManip()
+        requires std::is_default_constructible_v<F>
     = default;
     constexpr StreamManip(F const& f): function(f) {}
     constexpr StreamManip(F&& f): function(std::move(f)) {}
@@ -54,10 +55,10 @@ public:
     }
 
     template <typename CharT, typename Traits>
-    requires std::invocable < F, std::basic_ostream<CharT, Traits>
-    & > friend std::basic_ostream<CharT, Traits>& operator<<(
-            std::basic_ostream<CharT, Traits>& ostream,
-            StreamManip<F> const& manip) {
+        requires std::invocable<F, std::basic_ostream<CharT, Traits>&>
+    friend std::basic_ostream<CharT, Traits>& operator<<(
+        std::basic_ostream<CharT, Traits>& ostream,
+        StreamManip<F> const& manip) {
         std::invoke(manip.function, ostream);
         return ostream;
     }

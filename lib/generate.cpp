@@ -7,9 +7,9 @@
 #include <sstream>
 #include <stack>
 
-#include "common.h"
-#include "config.h"
-#include "graph.h"
+#include "graphgen/common.h"
+#include "graphgen/config.h"
+#include "graphgen/graph.h"
 #include "util.h"
 #include "vertexvisitor.h"
 

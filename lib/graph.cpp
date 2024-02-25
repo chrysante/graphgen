@@ -3,7 +3,7 @@
 #include <iomanip>
 #include <ostream>
 
-#include "config.h"
+#include "graphgen/config.h"
 #include "vertexvisitor.h"
 
 using namespace graphgen;

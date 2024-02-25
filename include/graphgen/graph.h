@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include <graphgen/api.h>
 #include <graphgen/style.h>
 
 namespace graphgen {
@@ -19,7 +20,7 @@ class Graph;
 class VertexVisitor;
 
 /// Vertex identifier. This is used to identify vertices when declaring edges
-class ID {
+class GRAPHGEN_API ID {
 public:
     /// Construct an ID from a `void*`. Can be used to easily derive unique IDs
     /// if vertices have address identity
@@ -53,7 +54,7 @@ private:
 enum class LabelKind { PlainText, HTML };
 
 /// Represents a label of a vertex.
-class Label {
+class GRAPHGEN_API Label {
 public:
     /// Constructs a label from \p text with label kind \p kind
     Label(std::string text = {}, LabelKind kind = LabelKind::PlainText);
@@ -153,7 +154,7 @@ private:
     using Type::style;
 
 /// Represents a vertex in the graph
-class Vertex: public VertexMixin<Vertex> {
+class GRAPHGEN_API Vertex: public VertexMixin<Vertex> {
     template <typename>
     friend class VertexMixin;
 
@@ -213,7 +214,7 @@ enum class GraphKind { Directed, Undirected, Tree };
 enum class RankDir { TopBottom, LeftRight, BottomTop, RightLeft };
 
 ///
-class Graph: public Vertex, public VertexMixin<Graph> {
+class GRAPHGEN_API Graph: public Vertex, public VertexMixin<Graph> {
 
 public:
     GRAPHGEN_USE_MIXIN(VertexMixin<Graph>)

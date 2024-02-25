@@ -3,10 +3,12 @@
 
 #include <string>
 
+#include <graphgen/api.h>
+
 namespace graphgen {
 
 /// \Returns the name of the currently set default font
-std::string defaultFont();
+GRAPHGEN_API std::string defaultFont();
 
 } // namespace graphgen
 
