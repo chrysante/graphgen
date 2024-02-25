@@ -20,7 +20,11 @@ project(
 set(CMAKE_CXX_VISIBILITY_PRESET     hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
-add_library(graphgen SHARED)
+if(graphgen_SHARED)
+  add_library(graphgen SHARED)
+else()
+  add_library(graphgen STATIC)
+endif()
 
 include(GenerateExportHeader)
 generate_export_header(graphgen
