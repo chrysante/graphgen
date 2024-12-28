@@ -98,6 +98,13 @@ public:
         return label(Label(std::move(text), kind));
     }
 
+    /// \overload
+    D* label(std::function<void(std::ostream&)> generator,
+             LabelKind kind = LabelKind::PlainText) {
+        return label(Label(std::move(generator), kind));
+    }
+
+    /// \overload
     D* label(Label label) {
         derived()->_label = std::move(label);
         return derived();
